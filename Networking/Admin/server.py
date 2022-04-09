@@ -3,8 +3,8 @@ from flask_restful import Api, Resource
 import random
 import string
 import requests
-import json
-
+import threading
+from connection_pools import connections_active, threaded_client, ready_to_execute
 
 app = Flask(__name__, template_folder='template')
 api = Api(app)
@@ -31,23 +31,36 @@ def check_details():
 
 class ClientAuthenticate(Resource):
     print("Running this function")
-    def get(self):
-        # if ("")
-        args = request.args
-        return args
     def post(self):
-        return {"data": f"{request.data} | headers : {request.headers['api-key']}"}
+        # this function will update the details in the database
+        data = request.json
+        return data
 class ClientCommands(Resource):
     def post(self):
-        """"""
-        pass
+        name = request.cookies.get('sid')
+        if name is None:
+            return "Login is required"
+        data = request.args
+        print(data)
+        print(ready_to_execute)
+        return 200
+        ready_to_execute[str(data["hostname"])].append(data["execute"])
+    def get(self):
+        name = request.cookies.get('sid')
+        if name is None:
+            return "Login is required"
+        response = make_response( render_template("data.html") )
+        return response
 
 class AdminLogin(Resource):
     def get(self):
         # We read session id cookie here
         #self.post()
         name = request.cookies.get('sid')
-        return name
+        if name is None:
+            response = make_response(render_template("login.html"))
+            return response
+        return redirect(url_for('clientcommands')) 
     def post(self):
         """
         This function will be called to authenticate admin.
@@ -56,7 +69,7 @@ class AdminLogin(Resource):
         #if "username" not in request.args or "password" not in request.args:
             #return {"error":"Headers did not contain credentials. "}
         # We'll set the cookie here
-        response = make_response( render_template("test.html") )
+        response = make_response( render_template("data.html") )
         response.set_cookie( "sid", random_char(20) )
         return response
 
@@ -66,8 +79,8 @@ api.add_resource(ClientCommands, "/execute")
 api.add_resource(AdminLogin, "/login")
 
 
-
+threading.Thread(target = connections_active).start()
 
 
 if __name__ == "__main__":
-	app.run(debug = True, port=3000)
+	app.run(host="10.247.71.196", debug = True, port=6969)

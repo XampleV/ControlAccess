@@ -10,19 +10,25 @@
 </head>
 
 <body>
-    <div class="container">
-        <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="uname" required>
+    <h2>Login Form</h2>
 
-        <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
+<form action="login" method="post">
 
-        <button type="submit">Login</button>
-    </div>
+  <div class="container">
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
 
-    <script src="Login.js"></script>
-
-
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+        
+    <button type="submit" onsubmit="redirect_webpage()">Login</button>
+  </div>
+</form>
+<script>
+    function redirect_webpage(){
+        window.location.replace("http://10.247.71.196/execute");
+    }
+</script>
 </body>
 
 </html>
