@@ -85,7 +85,7 @@ class threaded_client:
         self.conn = conn
         self.addr = addr
         self.hostname = hostname
-        print("A thread for {self.hostname} has started!")
+        print(f"A thread for {self.hostname} has started!")
         # ready_to_execute[self.addr] = []
 
         threading.Thread(target=self.recieve).start()
