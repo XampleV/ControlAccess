@@ -53,12 +53,12 @@ class AdminLogin(Resource):
         This function will be called to authenticate admin.
         After verifying info, we'll set a cookie
         """
-        #if "username" not in request.args or "password" not in request.args:
-            #return {"error":"Headers did not contain credentials. "}
+        if "username" not in request.args or "password" not in request.args:
+            return {"error":"Headers did not contain credentials. "}
         # We'll set the cookie here
-        response = make_response( render_template("test.html") )
+        response = make_response( render_template("Login.html") )
         response.set_cookie( "sid", random_char(20) )
-        return response
+        return "success"
 
 
 api.add_resource(ClientAuthenticate, "/auth")
@@ -70,4 +70,4 @@ api.add_resource(AdminLogin, "/login")
 
 
 if __name__ == "__main__":
-	app.run(debug = True, port=3000)
+	app.run(host ="10.247.71.196", debug = True, port=3000)
