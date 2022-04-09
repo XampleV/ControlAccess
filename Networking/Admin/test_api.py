@@ -8,7 +8,7 @@ def retrieve_cookie():
     login_g = requests.get(BASE_URL + "/login")
     print(login_g.text)
 def send_command(command):
-    send_exec = requests.post(BASE_URL + "/execute", params={"hostname":"66254.local", "execute":"execute:shutdown"}, cookies={"sid":"yes"})
+    send_exec = requests.post(BASE_URL + "/execute", params={"hostname":"66254.local", "execute":command}, cookies={"sid":"yes"})
     print(send_exec.text)
 #retrieve_cookie()
 # admin_login("admin","admin")

@@ -1,10 +1,11 @@
+import queue
 from flask import Flask, request, abort, send_file, make_response, render_template, redirect, url_for
 from flask_restful import Api, Resource
 import random
 import string
-import requests
+import os
 import threading
-from connection_pools import connections_active, threaded_client, ready_to_execute
+from connection_pools import connections_active, threaded_client, c
 
 app = Flask(__name__, template_folder='template')
 api = Api(app)
@@ -41,10 +42,23 @@ class ClientCommands(Resource):
         if name is None:
             return "Login is required"
         data = request.args
-        print(data)
-        print(ready_to_execute)
-        return 200
-        ready_to_execute[str(data["hostname"])].append(data["execute"])
+        hostname,command = data["hostname"], data["execute"]
+        # print(data["execute"])
+        # print(ready_to_execute)
+        # return 200
+        # ready_to_execute[str(data["hostname"])] = []
+        # ready_to_execute[data["hostname"]].append(data["execute"])
+        # print(ready_to_execute)
+        if os.path.exists(f"./logs/{hostname}") == False:
+            os.mkdir(f"./logs/{hostname}")
+        with open(f"./logs/{hostname}/request", "w") as f:
+            f.write(command)
+            f.close()
+            return 200
+        c.wrk_cntrl(hostname=hostname,command=command)
+        # server_queue.put({"hostname":data["hostname"], "command":data["execute"]})
+        print("Queued new item")
+        # ready_to_execute[data["hostname"]].append(data["execute"])
     def get(self):
         name = request.cookies.get('sid')
         if name is None:
@@ -78,8 +92,9 @@ api.add_resource(ClientAuthenticate, "/auth")
 api.add_resource(ClientCommands, "/execute")
 api.add_resource(AdminLogin, "/login")
 
-
-threading.Thread(target = connections_active).start()
+# server = connections_active()
+server_queue = queue.Queue()
+threading.Thread(target = connections_active, args=(server_queue,)).start()
 
 
 if __name__ == "__main__":
