@@ -84,7 +84,7 @@ class ClientCommands(Resource):
         if name is None:
             print("Using rule")
             rule = request.args.get('hn')
-            rule = f"http://10.247.71.187:6969/login?redirect={rule}"
+            rule = f"http://10.247.71.161:6969/login?redirect={rule}"
 
             return redirect(rule)
             # return redirect(url_for('adminlogin'))
@@ -165,4 +165,4 @@ threading.Thread(target = connections_active, args=(server_queue,)).start()
 
 
 if __name__ == "__main__":
-	app.run(host="10.247.71.187", debug = True, port=6969)
+	app.run(host="10.247.71.161", debug = True, port=6969)

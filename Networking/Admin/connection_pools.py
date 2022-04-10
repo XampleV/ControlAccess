@@ -9,7 +9,7 @@ thread_data = []
 class connections_active:
     def __init__(self, wkr):
         print("Starting Connections Server...")
-        self.base_url = "10.247.71.187"
+        self.base_url = "10.247.71.161"
         self.port = 4969
         self.wkr = wkr
         self.thread_queues = {}
