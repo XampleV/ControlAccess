@@ -117,7 +117,6 @@
     <div id="generalInfo">
         <label id="genInfo"><b>General Info</b></label>
         <ul>
-            <li>Status: {{ compStatus }}</li>
             <li>IPv4 Adress: {{ compIp }}</li>
             <li>OS Version: {{ compVersion }}</li>
             <li>CPU: {{ compCPU }}</li>
@@ -148,14 +147,12 @@
     <div id="functions">
         <label><b>Remote Functions</b></label>
         <br>
-        <button id="functionButton" type="submit" onclick="shutDown()">Shut Down</button>
-        <button id="functionButton" type="submit" onclick="restart()">Restart</button>
+        <button id="functionButton" type="submit" onclick="execute_command('shutdown')">Shut Down</button>
+        <button id="functionButton" type="submit" onclick="execute_command('restart')">Restart</button>
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script>
-        var base_url = "http://10.247.71.196:6969"
-
         function silentDeploy() {
 
         }
@@ -164,27 +161,19 @@
 
         }
 
-        function shutDown() {
+        function execute_command(cmd) {
             var http = new XMLHttpRequest();
-            var url = 'execute';
+            var url = '/execute';
             var getHostname = document.getElementById("hostname").innerHTML;
-            var command = "command:shutdown"
-            var paramss = `hostname=${getHostname}&execute=${command}`;
-            http.open('POST', url, true);
-            http.setRequestHeader('Cookie', document.cookie + "&X-API-KEY=fuck");
-            //Send the proper header information along with the request
+            var command = `execute:${cmd}`
+                // var paramss = `hostname=${getHostname}&execute=${command}`;
+            var paramss = JSON.stringify({
+                "hostname": getHostname,
+                "execute": command
+            });
 
-            http.send(paramss);
-        }
-
-        function restart() {
-            var http = new XMLHttpRequest();
-            var url = 'execute';
-            var getHostname = document.getElementById("hostname").innerHTML;
-            var command = "command:restart"
-            var paramss = `hostname=${getHostname}&execute=${command}`;
             http.open('POST', url, true);
-            http.setRequestHeader('Cookie', document.cookie);
+            http.setRequestHeader('Cookie', document.cookie + "&X-API-KEY=test");
             //Send the proper header information along with the request
 
             http.send(paramss);

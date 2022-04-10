@@ -100,7 +100,9 @@ class threaded_client:
             data = (self.conn.recv(2048).decode())
             print(f"Recieved: {data}")
             if not data:
-                print("Server closed the connection.")
+                print("Client closed the connection.")
+                # we set it offline
+                
                 break
             if data.startswith("execute:"):
                 # to_append = data.split("execute:")[1]

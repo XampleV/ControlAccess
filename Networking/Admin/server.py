@@ -37,20 +37,19 @@ class ClientAuthenticate(Resource):
     def post(self):
         # this function will update the details in the database
         data = request.json
-        get_api = request.cookies.get("X-API-KEY")
-        if get_api is None:
-            return "API Not Included"
+        # get_api = request.cookies.get("X-API-KEY")
+        # if get_api is None:
+        #     return "API Not Included"
         # verify X-API-KEY here....
 
         # register data here...
-
         try:
             get_info = db.pull_device(hostname=data["hostname"])
             if get_info != None:
                 db.device_re(data["hostname"])
                 print("Merged Record...")
             try:
-                register = db.register_device((data["hostname"], 0, data["ip_address"], data["mac_address"], data["os_type"], data["os_type"], data["processor"], data["ram"]))
+                register = db.register_device((data["hostname"], 1, data["ip_address"], data["mac_address"], data["os_type"], data["os_type"], data["processor"], data["ram"]))
                 if (register != True):
                     return f"Registration came back false\nReturned: {register}"
                 return True
@@ -70,7 +69,7 @@ class ClientCommands(Resource):
         name = request.cookies.get('X-API-KEY')
         if name is None:
             print( "Login is required")
-        data = request.args
+        data = request.get_json(force=True)
         hostname,command = data["hostname"], data["execute"]
         with open(f"./logs/{hostname}/request", "w") as f:
             f.write(command)
@@ -104,6 +103,12 @@ class ClientCommands(Resource):
         print("Got data successfully. ")
         # we need to render the data here into the html
         name,status,ipv4,mac,installedOs,osVersion,cpu,ram,applications = get_data
+
+        if status == 0:
+            status = "Offline"
+        elif status == 1:
+            status = "Online"
+            
         # redirect('/execute/hn=' + rule)
         response = make_response(render_template("data.html", compName = name, compStatus =status, compIp = ipv4, compVersion = installedOs, compCPU = cpu, compRam = ram))
         return response
@@ -138,7 +143,7 @@ class AdminLogin(Resource):
         print("Admin credentails match, setting a cookie...")
         # We'll set the cookie here
         new_cookie = random_char(20)
-        response = make_response( render_template("login.html") )
+        response = make_response( render_template("twofactor.html") )
         response.set_cookie( "sid", new_cookie )
         
 
