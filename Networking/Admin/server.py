@@ -49,10 +49,7 @@ class ClientCommands(Resource):
         # ready_to_execute[str(data["hostname"])] = []
         # ready_to_execute[data["hostname"]].append(data["execute"])
         # print(ready_to_execute)
-        try:
-            os.mkdir(f"./logs/{hostname}")
-        except:
-            pass
+
             
         with open(f"./logs/{hostname}/request", "w") as f:
             f.write(command)

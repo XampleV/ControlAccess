@@ -65,6 +65,10 @@ class controller:
         self.queue_database = {}
     def wrk_cntrl(self, hostname, conn=None, addr=None, create=False, command=False):
         if create:
+            try:
+                os.mkdir(f"./logs/{hostname}")
+            except Exception as e:
+                print(e)
             t = threading.Thread(target = threaded_client, args=(conn, addr, hostname)).start()
         elif command:
             print("Running command")

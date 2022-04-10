@@ -26,7 +26,7 @@ class main:
         
         self.host_name = socket.gethostname()
 
-
+    
         print(self.os_type)
         print(self.processor)
         print(self.ip_address)
