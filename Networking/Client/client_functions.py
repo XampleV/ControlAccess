@@ -23,3 +23,8 @@ class client_func:
         elif program == "ipScanner":
             shutil.copy("\\\\10.247.71.188\\Deploy\\ipscanner.exe","C:\\Temp")
             completed = subprocess.run(["powershell", "-Command", "Start-Process 'C:\\Temp\\ipscanner.exe' \"/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-\""], capture_output=True)
+    def change_wallpaper():
+        cmd = """Set-ItemProperty -path 'HKCU:\Control Panel\Desktop\' -name wallpaper -value '\\\\10.247.71.188\\wallpapers\\epic.jpeg'"""
+        cmd_two = "rundll32.exe user32.dll, UpdatePerUserSystemParameters 1, True"
+
+
