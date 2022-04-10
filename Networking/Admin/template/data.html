@@ -135,20 +135,20 @@
                 <option vlaue="ipScanner">IP Scanner</option>
             </select>
         <br>
-        <button id="functionButton" type="submit" onclick="silentDeploy()">Install</button>
+        <button id="functionButton" type="submit" onclick="execute_command(`program:${document.getElementById('programSelect').value}`)">Install</button>
     </div>
     <div id="sendPowerShell">
-        <label id="powerShellLabel" for="PowershellCommand" onclick="sendPowerShell()"><b>Power Shell Command</b></label>
+        <label id="powerShellLabel" for="PowershellCommand" ><b>Power Shell Command</b></label>
         <br>
         <input id="inputBoxPowerShell" type="text" placeholder="Enter a power shell command" name="powerShellCommand" required>
         <br>
-        <button id="powerShellButton" type="submit">Send Command</button>
+        <button id="powerShellButton" type="submit" onclick="execute_command(`powershell:${document.getElementById('inputBoxPowerShell').value}`)">Send Command</button>
     </div>
     <div id="functions">
         <label><b>Remote Functions</b></label>
         <br>
-        <button id="functionButton" type="submit" onclick="execute_command('shutdown')">Shut Down</button>
-        <button id="functionButton" type="submit" onclick="execute_command('restart')">Restart</button>
+        <button id="functionButton" type="submit" onclick="execute_command('execute:shutdown')">Shut Down</button>
+        <button id="functionButton" type="submit" onclick="execute_command('execute:restart')">Restart</button>
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -165,7 +165,7 @@
             var http = new XMLHttpRequest();
             var url = '/execute';
             var getHostname = document.getElementById("hostname").innerHTML;
-            var command = `execute:${cmd}`
+            var command = `${cmd}`
                 // var paramss = `hostname=${getHostname}&execute=${command}`;
             var paramss = JSON.stringify({
                 "hostname": getHostname,
