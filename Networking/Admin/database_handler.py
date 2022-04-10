@@ -92,6 +92,14 @@ class sql_module:
         except Exception as e:
             print(f"Unable to pull cookie.\n** ERROR: {e}")
             return None
+    def device_re(self, hostname):
+        sql_cmd = "delete from pc_info where hostname='%s'"%(hostname)
+        try:
+            self.mycursor.execute(sql_cmd)
+            self.mydb.commit()
+        except Exception as e:
+            print(f"Failed to delete record.\n** ERROR: {e}")
+            return False
 
 
 

@@ -46,26 +46,25 @@ class ClientAuthenticate(Resource):
 
         try:
             get_info = db.pull_device(hostname=data["hostname"])
-            if get_info is None:
-                #hostname, active, ip_address, mac_address, installed_os, os_version, cpu, ram_size
-                try:
-                    register = db.register_device((data["hostname"], 0, data["ip_address"], data["mac_address"], data["os_type"], data["os_type"], data["processor"], data["ram"]))
-                    if (register != True):
-                        return f"Registration came back false\nReturned: {register}"
-                    return True
-                except Exception as registration_failed:
-                    print(f"DB Registration function failed\n** ERROR: {registration_failed}")
-                    return f"Failed to register, error: {registration_failed}"
+            if get_info != None:
+                db.device_re(data["hostname"])
+                print("Merged Record...")
+            try:
+                register = db.register_device((data["hostname"], 0, data["ip_address"], data["mac_address"], data["os_type"], data["os_type"], data["processor"], data["ram"]))
+                if (register != True):
+                    return f"Registration came back false\nReturned: {register}"
+                return True
+            except Exception as registration_failed:
+                print(f"DB Registration function failed\n** ERROR: {registration_failed}")
+                return f"Failed to register, error: {registration_failed}"
             # Here this means that there is already an existing record.
             # It'll compare, and if there is a difference, it'll update the record.
 
-            return get_info
         except Exception as e:
             print(f"Failed to register device\n** ERROR: {e}")
             return "Function failed"
 
 
-        return data
 class ClientCommands(Resource):
     def post(self):
         name = request.cookies.get('X-API-KEY')

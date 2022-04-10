@@ -2,21 +2,34 @@ from socket import getfqdn
 import requests
 import os
 BASE_URL = "http://10.247.71.196:6969"
-
+sid = "dXvHskHsciOgpAEiXsOy"
 def admin_login(username, password):
     login_r = requests.post(BASE_URL + "/login", params={"username":"admin", "password":"admin"})
     print (login_r.text)
 def retrieve_cookie():
     login_g = requests.get(BASE_URL + "/login")
     print(login_g.text)
+
 def send_command(command):
-    send_exec = requests.post(BASE_URL + "/execute", params={"hostname":"DESKTOP-S0T4008", "execute":command}, cookies={"sid":"yes"})
+    send_exec = requests.post(BASE_URL + "/execute", params={"hostname":"DESKTOP-S0T4008", "execute":command}, cookies={"sid":sid})
     print(send_exec.text)
+
+def install_app(command):
+    send_request = requests.post(BASE_URL +"/execute", params={"hostname":"DESKTOP-S0T4008", "execute":command}, cookies={"sid":sid, "X-API-KEY":"yes"})
+    print(send_request.text)
+
+def restart():
+    send_restat = requests.post(BASE_URL +"/execute", params={"hostname":"DESKTOP-S0T4008", "execute":command}, cookies={"sid":sid, "X-API-KEY":"yes"})
+    print(send_restat.text)
+
+def shutDown():
+    send_shutDown = requests.post(BASE_URL +"/execute", params={"hostname":"DESKTOP-S0T4008", "execute":command}, cookies={"sid":sid, "X-API-KEY":"yes"})
+    print(shutDown.text)
 #retrieve_cookie()
 # admin_login("admin","admin")
 
 # send_command("execute:shutdown")
-
+install_app("program:sublime")
 
     
 # set up for pc_specs here 

