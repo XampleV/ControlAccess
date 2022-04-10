@@ -19,12 +19,10 @@ def install_app(command):
     print(send_request.text)
 
 def restart():
-    send_restat = requests.post(BASE_URL +"/execute", params={"hostname":"DESKTOP-S0T4008", "execute":command}, cookies={"sid":sid, "X-API-KEY":"yes"})
-    print(send_restat.text)
+    pass
 
 def shutDown():
-    send_shutDown = requests.post(BASE_URL +"/execute", params={"hostname":"DESKTOP-S0T4008", "execute":command}, cookies={"sid":sid, "X-API-KEY":"yes"})
-    print(shutDown.text)
+    pass
 #retrieve_cookie()
 # admin_login("admin","admin")
 

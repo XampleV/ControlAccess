@@ -50,7 +50,6 @@ class main:
                 "X-API-KEY":"test"
             }
         )
-        print("Done")
         print(send_data.text)
     def constant_connection(self):
         try:

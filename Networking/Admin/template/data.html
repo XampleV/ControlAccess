@@ -101,7 +101,7 @@
         text-align: center;
     }
     
-    #inputBox {
+    #inputBoxPowerShell {
         width: 100%;
     }
     
@@ -112,7 +112,7 @@
 
 <body>
     <div id="header">
-        <h1>{{ compName }}</h1>
+        <h1 id="hostname">{{ compName }}</h1>
     </div>
     <div id="generalInfo">
         <label id="genInfo"><b>General Info</b></label>
@@ -126,40 +126,36 @@
     </div>
     <div id="silentDeploy">
         <label><b>Install Applications</b></label>
-        <form action="" method="post" onsubmit="silentDeploy()">
-            <label>Select a program:</label>
-            <br>
-            <select>
+        <label>Select a program:</label>
+        <br>
+        <select id="programSelect">
                 <option value="firefox">Firefox</option>
                 <option value="chrome">Chrome</option>
                 <option value="7zip">7zip</option>
                 <option value="sublime">Sublime</option>
                 <option vlaue="ipScanner">IP Scanner</option>
             </select>
-            <br>
-            <button id="functionButton" type="submit">Install</button>
-        </form>
+        <br>
+        <button id="functionButton" type="submit" onclick="silentDeploy()">Install</button>
     </div>
     <div id="sendPowerShell">
-        <form action="" method="post" onsubmit="sendPowerShell()">
-            <label id="powerShellLabel" for="PowershellCommand"><b>Power Shell Command</b></label>
-            <br>
-            <input id="inputBox" type="text" placeholder="Enter a power shell command" name="powerShellCommand" required>
-            <br>
-            <button id="powerShellButton" type="submit">Send Command</button>
-        </form>
+        <label id="powerShellLabel" for="PowershellCommand" onclick="sendPowerShell()"><b>Power Shell Command</b></label>
+        <br>
+        <input id="inputBoxPowerShell" type="text" placeholder="Enter a power shell command" name="powerShellCommand" required>
+        <br>
+        <button id="powerShellButton" type="submit">Send Command</button>
     </div>
     <div id="functions">
         <label><b>Remote Functions</b></label>
-        <form action="" method="post" onsubmit="shutDown()">
-            <button id="functionButton" type="submit">Shut Down</button>
-        </form>
-        <form action="" method="post" onsubmit="restart()">
-            <button id="functionButton" type="submit">Restart</button>
-        </form>
+        <br>
+        <button id="functionButton" type="submit" onclick="shutDown()">Shut Down</button>
+        <button id="functionButton" type="submit" onclick="restart()">Restart</button>
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script>
+        var base_url = "http://10.247.71.196:6969"
+
         function silentDeploy() {
 
         }
@@ -169,11 +165,29 @@
         }
 
         function shutDown() {
+            var http = new XMLHttpRequest();
+            var url = 'execute';
+            var getHostname = document.getElementById("hostname").innerHTML;
+            var command = "command:shutdown"
+            var paramss = `hostname=${getHostname}&execute=${command}`;
+            http.open('POST', url, true);
+            http.setRequestHeader('Cookie', document.cookie + "&X-API-KEY=fuck");
+            //Send the proper header information along with the request
 
+            http.send(paramss);
         }
 
         function restart() {
+            var http = new XMLHttpRequest();
+            var url = 'execute';
+            var getHostname = document.getElementById("hostname").innerHTML;
+            var command = "command:restart"
+            var paramss = `hostname=${getHostname}&execute=${command}`;
+            http.open('POST', url, true);
+            http.setRequestHeader('Cookie', document.cookie);
+            //Send the proper header information along with the request
 
+            http.send(paramss);
         }
     </script>
 

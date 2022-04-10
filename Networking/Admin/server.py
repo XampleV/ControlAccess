@@ -69,7 +69,7 @@ class ClientCommands(Resource):
     def post(self):
         name = request.cookies.get('X-API-KEY')
         if name is None:
-            return "Login is required"
+            print( "Login is required")
         data = request.args
         hostname,command = data["hostname"], data["execute"]
         with open(f"./logs/{hostname}/request", "w") as f:
