@@ -16,13 +16,10 @@ class client_func:
             completed = subprocess.run(["powershell", "-Command", "Start-Process 'C:\\Temp\\Firefox Setup 99.0.msi' \"-ms\""], capture_output=True) 
         elif program == "chrome":
             shutil.copy("\\\\10.247.71.188\\Deploy\\thechrome.msi","C:\\Temp")
-            completed = subprocess.run(["powershell", "-Command", "Start-Process 'C:\\Temp\\thechrome.msi /qn'"], capture_output=True)
-        elif program == "7zip":
-            shutil.copy("\\\\10.247.71.188\\Deploy\\7zip.exe","C:\\Temp")
-            completed = subprocess.run(["powershell", "-Command", "Start-Process 'C:\\Temp\\7zip.exe' \"-ms\""], capture_output=True)
+            completed = subprocess.run(["powershell", "-Command", "Start-Process 'C:\\Temp\\thechrome.msi' \"/qn\""], capture_output=True)
         elif program == "sublime":
             shutil.copy("\\\\10.247.71.188\\Deploy\\sublime.exe","C:\\Temp")
-            completed = subprocess.run(["powershell", "-Command", "Start-Process 'C:\\Temp\\sublime.exe' \"-ms\""], capture_output=True)
+            completed = subprocess.run(["powershell", "-Command", "Start-Process 'C:\\Temp\\sublime.exe' \"/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /Sa\""], capture_output=True)
         elif program == "ipScanner":
             shutil.copy("\\\\10.247.71.188\\Deploy\\ipscanner.exe","C:\\Temp")
-            completed = subprocess.run(["powershell", "-Command", "Start-Process 'C:\\Temp\\ipscanner.exe' \"-ms\""], capture_output=True)
+            completed = subprocess.run(["powershell", "-Command", "Start-Process 'C:\\Temp\\ipscanner.exe' \"/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-\""], capture_output=True)

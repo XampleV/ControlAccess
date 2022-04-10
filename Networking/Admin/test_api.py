@@ -1,4 +1,6 @@
+from socket import getfqdn
 import requests
+import os
 BASE_URL = "http://10.247.71.196:6969"
 
 def admin_login(username, password):
@@ -15,15 +17,17 @@ def send_command(command):
 
 # send_command("execute:shutdown")
 
-import mysql.connector
 
-mydb = mysql.connector.connect(
-  host="10.247.67.192",
-  user="root",
-  password="SunnyD2020",
-  database="mysql"
-)
+    
+# set up for pc_specs here 
 
-mycursor = mydb.cursor()
-mycursor.execute("create table if not exists admin_users (USERNAME TEXT NOT NULL, PASSWORD TEXT NOT NULL, SESSSIONID TEXT NOT NULL)")
-mydb.commit()
+# sql_cmd = "create table if not exists pc_info (hostname TEXT NOT NULL, active INT NOT NULL, ip_address text not null, os_version text not null, cpu text not null, ram_size text not null)"
+
+
+# print(c.get_admin_details("admin"))
+# c.register_device(("fr",0, "mx", "work", "bruh", "ram_size"))
+# c.pull_device("fr")
+
+# mycursor.execute(sql_cmd)
+# mydb.commit()
+# get_admin_details("admin")

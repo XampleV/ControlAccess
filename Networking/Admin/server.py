@@ -6,7 +6,9 @@ import string
 import os
 import threading
 from connection_pools import connections_active, threaded_client, c
+from database_handler import sql_module
 
+db = sql_module()
 app = Flask(__name__, template_folder='template')
 api = Api(app)
 
@@ -35,41 +37,83 @@ class ClientAuthenticate(Resource):
     def post(self):
         # this function will update the details in the database
         data = request.json
+        get_api = request.cookies.get("X-API-KEY")
+        if get_api is None:
+            return "API Not Included"
+        # verify X-API-KEY here....
+
+        # register data here...
+
+        try:
+            get_info = db.pull_device(hostname=data["hostname"])
+            if get_info is None:
+                #hostname, active, ip_address, mac_address, installed_os, os_version, cpu, ram_size
+                try:
+                    register = db.register_device((data["hostname"], 0, data["ip_address"], data["mac_address"], data["os_type"], data["os_type"], data["processor"], data["ram"]))
+                    if (register != True):
+                        return f"Registration came back false\nReturned: {register}"
+                    return True
+                except Exception as registration_failed:
+                    print(f"DB Registration function failed\n** ERROR: {registration_failed}")
+                    return f"Failed to register, error: {registration_failed}"
+            # Here this means that there is already an existing record.
+            # It'll compare, and if there is a difference, it'll update the record.
+
+            return get_info
+        except Exception as e:
+            print(f"Failed to register device\n** ERROR: {e}")
+            return "Function failed"
+
+
         return data
 class ClientCommands(Resource):
     def post(self):
-        name = request.cookies.get('sid')
+        name = request.cookies.get('X-API-KEY')
         if name is None:
             return "Login is required"
         data = request.args
         hostname,command = data["hostname"], data["execute"]
-        # print(data["execute"])
-        # print(ready_to_execute)
-        # return 200
-        # ready_to_execute[str(data["hostname"])] = []
-        # ready_to_execute[data["hostname"]].append(data["execute"])
-        # print(ready_to_execute)
-
-            
         with open(f"./logs/{hostname}/request", "w") as f:
             f.write(command)
             f.close()
             return 200
-        c.wrk_cntrl(hostname=hostname,command=command)
-        # server_queue.put({"hostname":data["hostname"], "command":data["execute"]})
-        print("Queued new item")
-        # ready_to_execute[data["hostname"]].append(data["execute"])
     def get(self):
+        args = request.args
+        # hn = hostname
+        if "hn" not in args:
+            return "device needs to be passed in url"
         name = request.cookies.get('sid')
         if name is None:
-            return "Login is required"
-        response = make_response( render_template("data.html") )
+            print("Using rule")
+            rule = request.args.get('hn')
+            rule = f"http://10.247.71.196:6969/login?redirect={rule}"
+
+            return redirect(rule)
+            # return redirect(url_for('adminlogin'))
+        # verify if the cookie here is valid. 
+        print(f"Found Cookie: {name}")
+        get_session = db.search_by_session(name)
+        if get_session != True:
+            return "Invalid cookie"
+        # pull device here
+        try:
+            get_data = db.pull_device(args["hn"])
+            if get_data == None:
+                return "device not found"
+        except Exception as e:
+            return f"Error pulling device, error : {e}"
+        print("Got data successfully. ")
+        # we need to render the data here into the html
+        name,status,ipv4,mac,installedOs,osVersion,cpu,ram,applications = get_data
+        # redirect('/execute/hn=' + rule)
+        response = make_response(render_template("data.html", compName = name, compStatus =status, compIp = ipv4, compVersion = installedOs, compCPU = cpu, compRam = ram))
         return response
 
 class AdminLogin(Resource):
     def get(self):
         # We read session id cookie here
         #self.post()
+        
         name = request.cookies.get('sid')
         if name is None:
             response = make_response(render_template("login.html"))
@@ -80,11 +124,30 @@ class AdminLogin(Resource):
         This function will be called to authenticate admin.
         After verifying info, we'll set a cookie
         """
-        #if "username" not in request.args or "password" not in request.args:
-            #return {"error":"Headers did not contain credentials. "}
+        try:
+            username = request.form.get("uname")
+            password = request.form.get("psw")
+        except:
+            return "Credentails not provided"
+        pull_admin_account = db.get_admin_details(username=username)
+        retr_name = pull_admin_account[0]
+        if pull_admin_account is None:
+            return "User account not found"
+        # we should hash the passwords in the database
+        if (password != pull_admin_account[1]):
+            return "Incorrect password"
+        print("Admin credentails match, setting a cookie...")
         # We'll set the cookie here
-        response = make_response( render_template("data.html") )
-        response.set_cookie( "sid", random_char(20) )
+        new_cookie = random_char(20)
+        response = make_response( render_template("login.html") )
+        response.set_cookie( "sid", new_cookie )
+        
+
+
+        # updating the cookie here in the database..
+        if db.modify_admin_cookie(admin_username=retr_name, new_cookie=new_cookie) != True:
+            print("Wasn't able to modify cookie.")
+        
         return response
 
 

