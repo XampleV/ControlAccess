@@ -12,7 +12,7 @@ class client_func:
         os.system("shutdown /r /t 0")
     def silent_deploy(program):
         if program == "firefox":
-            shutil.copy("""\\\10.247.71.188\\Deploy\\Firefox Setup 99.0.msi""","C:\\Temp")
+            shutil.copy("""\\\\10.247.71.188\\Deploy\\Firefox Setup 99.0.msi""","C:\\Temp")
             completed = subprocess.run(["powershell", "-Command", "Start-Process 'C:\\Temp\\Firefox Setup 99.0.msi' \"-ms\""], capture_output=True) 
         elif program == "chrome":
             shutil.copy("\\10.247.71.188\Deploy\thechrome.msi","C:\Temp")
