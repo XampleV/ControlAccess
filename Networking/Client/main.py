@@ -15,7 +15,7 @@ class main:
         self.grab_specs()
         threading.Thread(target=self.constant_connection).start()
     def grab_specs(self):
-        self.os_type = platform.version()
+        self.os_type = platform.platform()
         self.processor = platform.processor()
         self.mac_address = get_mac_address()
 
