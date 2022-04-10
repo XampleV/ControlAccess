@@ -84,7 +84,7 @@ class ClientCommands(Resource):
         if name is None:
             print("Using rule")
             rule = request.args.get('hn')
-            rule = f"http://10.247.71.196:6969/login?redirect={rule}"
+            rule = f"http://10.247.71.187:6969/login?redirect={rule}"
 
             return redirect(rule)
             # return redirect(url_for('adminlogin'))
