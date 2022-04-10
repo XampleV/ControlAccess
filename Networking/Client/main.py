@@ -9,8 +9,8 @@ from getmac import get_mac_address
 
 class main:
     def __init__(self):
-        self.base_url = "http://10.247.71.196:6969"
-        self.ip = "10.247.71.196"
+        self.base_url = "http://10.247.71.187:6969"
+        self.ip = "10.247.71.187"
         self.port = 4969
         self.grab_specs()
         threading.Thread(target=self.constant_connection).start()

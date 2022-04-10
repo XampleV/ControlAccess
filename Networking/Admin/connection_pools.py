@@ -9,7 +9,7 @@ thread_data = []
 class connections_active:
     def __init__(self, wkr):
         print("Starting Connections Server...")
-        self.base_url = "10.247.71.196"
+        self.base_url = "10.247.71.187"
         self.port = 4969
         self.wkr = wkr
         self.thread_queues = {}
@@ -102,7 +102,7 @@ class threaded_client:
             if not data:
                 print("Client closed the connection.")
                 # we set it offline
-                
+
                 break
             if data.startswith("execute:"):
                 # to_append = data.split("execute:")[1]

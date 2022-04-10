@@ -165,4 +165,4 @@ threading.Thread(target = connections_active, args=(server_queue,)).start()
 
 
 if __name__ == "__main__":
-	app.run(host="10.247.71.196", debug = True, port=6969)
+	app.run(host="10.247.71.187", debug = True, port=6969)
