@@ -5,15 +5,15 @@ import os
 class sql_module:
     def __init__(self):
         # using os enviorn here might be smarter
-        with open(os.path.expanduser("~/Desktop/secret/secret"), "r") as f:
-            secret = f.read()
-            secret = secret.split(",")
-            f.close()
+        # with open(os.path.expanduser("~/Desktop/secret/secret"), "r") as f:
+        #     secret = f.read()
+        #     secret = secret.split(",")
+        #     f.close()
 
-        self.host = secret[0]
-        self.user = secret[1]
-        self.password = secret[2]
-        self.database = secret[3]
+        # self.host = secret[0]
+        # self.user = secret[1]
+        # self.password = secret[2]
+        # self.database = secret[3]
         # print(self.host, self.user, self.password, self.database)
 
         self.establish_connection()
@@ -21,9 +21,9 @@ class sql_module:
     def establish_connection(self):
         try:
             self.mydb = mysql.connector.connect(
-                host=self.host,
-                user=self.user,
-                password=self.password,
+                host="10.247.67.192",
+                user="root",
+                password="SunnyD2020",
                 database="device-info"
             )
             self.mycursor = self.mydb.cursor()
